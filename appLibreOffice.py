@@ -1,8 +1,7 @@
 # appLibreOffice.py
 import os
 from flask import Flask, request, send_file, jsonify
-from werkzeug.utils import secure_filename
-from libreService import convert_docx_to_pdf  # Импортируем функцию из libreService
+from libreService import convert_docx_to_pdf
 
 app = Flask(__name__)
 
@@ -19,20 +18,21 @@ def convert_to_pdf():
         return jsonify({"error": "Invalid file type. Only Word files are supported."}), 400
 
     try:
-        # Сохраняем временно файл на сервере
-        input_file_path = os.path.join('temp', secure_filename(file.filename))
-        os.makedirs(os.path.dirname(input_file_path), exist_ok=True)
-        file.save(input_file_path)
+        # Получаем поток байтов
+        docx_bytes = file.read()
 
         # Путь для сохранения PDF
-        output_pdf_path = os.path.join('temp', f"{os.path.splitext(secure_filename(file.filename))[0]}.pdf")
+        output_pdf_path = os.path.join('temp', f"{os.path.splitext(file.filename)[0]}.pdf")
 
         # Вызываем функцию конвертации из libreService
-        convert_docx_to_pdf(input_file_path, output_pdf_path)
+        pdf_file_path = convert_docx_to_pdf(docx_bytes, output_pdf_path)
 
-        # Отправляем PDF в ответ
-        return send_file(output_pdf_path, mimetype='application/pdf', as_attachment=True,
-                         download_name=f'{file.filename}.pdf')
+        # Если PDF файл успешно создан, отправляем его клиенту
+        if pdf_file_path:
+            return send_file(pdf_file_path, mimetype='application/pdf', as_attachment=True,
+                             download_name=f'{file.filename}.pdf')
+        else:
+            return jsonify({"error": "Error during PDF conversion"}), 500
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
