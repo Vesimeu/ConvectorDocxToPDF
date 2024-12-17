@@ -30,7 +30,7 @@ def convert_docx_to_pdf(docx_bytes, output_pdf_path):
         '--outdir', output_dir, temp_docx_path
     ]
 
-    print(f"Запуск команды: {cmd}")  # Отладочный вывод для проверки команды
+    print(f"Запуск команды: {cmd}")  # Отладочный вывод
 
     result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 

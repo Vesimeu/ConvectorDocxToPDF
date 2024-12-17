@@ -5,7 +5,6 @@ from libreService import convert_docx_to_pdf
 
 app = Flask(__name__)
 
-# Маршрут для конвертации DOCX в PDF
 @app.route('/convert', methods=['POST'])
 def convert_to_pdf():
     if 'file' not in request.files:
