@@ -12,4 +12,5 @@ appLibreOffice - ендпоинт работающий с методом
     URL: http://localhost:5000/convert
     Тело запроса:
     Выберите form-data
-    Добавьте файл file с типом application/vnd.openxmlformats-officedocument.wordprocessingml.document
+    Добавьте файл file
+![img.png](img.png)
